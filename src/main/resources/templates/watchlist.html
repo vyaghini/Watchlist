@@ -1,0 +1,66 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	
+    <title>Your page title</title>
+    <style>
+        .l-padding {
+            padding-left: 2em;
+        }
+        .t-padding {
+            padding-top: 1em;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<div class="pure-g">
+    <div class="pure-u-1 l-padding t-padding">
+		<button class="pure-button pure-button-primary">Create new</button>	 
+	</div>
+    <div class="pure-u-1 l-padding t-padding"> 
+		<table class="pure-table pure-table-bordered" >
+		    <thead>
+		        <tr>
+		            <th>Title</th>
+		            <th>Rating</th>
+		            <th>Priority</th>
+		            <th>Comment</th>
+		            <th>Status</th>
+		            <th></th>
+		            <th></th>		            		            		            
+		        </tr>
+		    </thead>
+		
+		    <tbody>
+		        <tr th:each="watchlistItem : ${watchlistItems}">
+		            <td th:text="${watchlistItem.title}">Avatar</td>
+		            <td th:text="${watchlistItem.rating}">7.8</td>
+		            <td th:text="${watchlistItem.priority}">LOW</td>
+		            <td th:text="${watchlistItem.comment}">Peter recommended</td>
+		            <td th:text="${watchlistItem.status}">NEW</td>
+		            <td><button class="pure-button pure-button-primary">Delete</button></td>
+		            <td><button class="pure-button pure-button-primary">Seen</button></td>
+		        </tr>
+
+		    </tbody>
+		</table>
+    </div>
+    <div class="pure-u-1 l-padding t-padding">
+		<div>Number of movies to watch: <span th:text="${numberOfMovies}"> </span> </div>	 
+	</div>
+</div>
+<div class="pure-g">
+    <div class="pure-u-1-1 l-box">
+    	
+	</div>
+</div>
+	
+    
+</body>
+</html>
