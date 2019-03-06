@@ -30,26 +30,25 @@ public class WatchlistServiceTest {
 	private MovieRatingService movieRatingServiceMock;
 	
 	@Test
-	public void getWatchlistItems_ListWithTwoItems_ReturnsTheList() {
+	public void getWatchlistItemsShoiuldReturnAllItems() {
+		
 		WatchlistItem item1 = new WatchlistItem("Up", "7.5", "HIGH","", "");
 		WatchlistItem item2 = new WatchlistItem("Se7en", "9.9", "MEDIUM","", "");
-		
 		List<WatchlistItem> mockResult = Arrays.asList(item1,item2);
-		
 		when(watchlistRepositoryMock.getList()).thenReturn(mockResult);
 		
 		List<WatchlistItem> watchlistItems = watchlistService.getWatchlistItems();
+		
 		assertEquals(2, watchlistItems.size());
 		assertEquals("Up", watchlistItems.get(0).getTitle());
 		assertEquals("Se7en", watchlistItems.get(1).getTitle());
 	}
 	
 	@Test
-	public void getWatchlistItems_movieRatingServiceReturns10_TheMovieRatingIsOverwrittenWith10() {
+	public void getWatchlistItemsShouldReturnMovieRatingProvidedByOMDB() {
 		
 		WatchlistItem item1 = new WatchlistItem("Up", "7.5", "HIGH","", "");
 		List<WatchlistItem> mockResult = Arrays.asList(item1);
-		Optional<String> mockating = Optional.of("10");
 		when(watchlistRepositoryMock.getList()).thenReturn(mockResult);
 		when(movieRatingServiceMock.getMovieRating(any(String.class))).thenReturn(Optional.of("10"));
 		
@@ -57,5 +56,4 @@ public class WatchlistServiceTest {
 
 		assertEquals("10", watchlistItems.get(0).getRating());
 	}
-
 }
