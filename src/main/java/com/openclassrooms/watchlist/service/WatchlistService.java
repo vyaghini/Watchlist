@@ -3,15 +3,20 @@ package com.openclassrooms.watchlist.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.openclassrooms.watchlist.controller.WatchlistController;
 import com.openclassrooms.watchlist.domain.WatchlistItem;
 import com.openclassrooms.watchlist.exception.DuplicateTitleException;
 import com.openclassrooms.watchlist.repository.WatchlistRepository;
 
 @Service
 public class WatchlistService {
+	
+	Logger logger = LoggerFactory.getLogger(WatchlistService.class);
 	
 	private WatchlistRepository watchlistRepository;
 	private MovieRatingService movieRatingService;
@@ -25,6 +30,8 @@ public class WatchlistService {
 
 	public List<WatchlistItem> getWatchlistItems() {
 		List<WatchlistItem> watchlistItems = watchlistRepository.getList();
+		
+		logger.debug(watchlistItems.size() + "Items found");
 		
 		for (WatchlistItem watchlistItem : watchlistItems) {
 			Optional<String> movieRating = movieRatingService.getMovieRating(watchlistItem.getTitle());
@@ -40,6 +47,7 @@ public class WatchlistService {
 	}
 	
 	public void addWatchlistItem(WatchlistItem watchlistItem) throws DuplicateTitleException {
+		
 		
 		if (watchlistRepository.findByTitle(watchlistItem.getTitle()).isPresent()) {
 			throw new DuplicateTitleException();
