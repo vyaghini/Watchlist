@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.openclassrooms.watchlist.domain.WatchlistItem;
 
+@Service
 public class WatchlistRepository {
 	
 	List<WatchlistItem> watchlistItems = new ArrayList<WatchlistItem>();

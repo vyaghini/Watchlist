@@ -3,6 +3,7 @@ package com.openclassrooms.watchlist.service;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -10,10 +11,13 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class MovieRatingService {
+@ConditionalOnProperty(name = "app.env", havingValue = "prod")
+@Service
+public class MovieRatingServiceLiveImpl implements MovieRatingService {
 	
 	private String apiUrl = "http://www.omdbapi.com/?apikey=cc9bf9ef&t=";	
 	
+	@Override
 	public Optional<String> getMovieRating(String title) { 
 		
 		RestTemplate template = new RestTemplate();
