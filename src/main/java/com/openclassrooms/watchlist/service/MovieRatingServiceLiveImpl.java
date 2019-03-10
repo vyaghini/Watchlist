@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.watchlist.controller.WatchlistController;
 
 @ConditionalOnProperty(name = "app.env", havingValue = "prod")
 @Service
