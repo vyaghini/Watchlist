@@ -1,6 +1,5 @@
 package com.openclassrooms.watchlist.service;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -28,17 +27,17 @@ public class MovieRatingServiceLiveImpl implements MovieRatingService {
 		
 		logger.debug("Calling omdbapi with url:"+apiUrl + title);
 		
-		ResponseEntity<String> response = template.getForEntity(apiUrl + title , String.class);
-		
 		try {
+			ResponseEntity<String> response = template.getForEntity(apiUrl + title , String.class);
+
 			JsonNode node = new ObjectMapper().readTree(response.getBody()).path("imdbRating");
 			if (node.isMissingNode()) {
 				logger.warn("imdbRating node is missing, returning empty.");
 				return Optional.empty();
 			}
 			return Optional.ofNullable(node.asText());
-		} catch (IOException e) {
-			logger.error("ERROR! IOException happened!",e);
+		} catch (Exception e) {
+			logger.error("ERROR! Exception happened!",e);
 			return Optional.empty();
 		}
 	}
