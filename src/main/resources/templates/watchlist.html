@@ -45,7 +45,8 @@
 		            <td th:text="${watchlistItem.comment}">Peter recommended</td>
 		            <td th:text="${watchlistItem.status}">NEW</td>
 		            <td><button class="pure-button pure-button-primary">Delete</button></td>
-		            <td><button class="pure-button pure-button-primary">Seen</button></td>
+		            
+		            <td><a href="#" class="btn btn-info" role="button" th:href="@{/watchlistItem(id=${watchlistItem.id})}" >Update</a></td>
 		        </tr>
 
 		    </tbody>

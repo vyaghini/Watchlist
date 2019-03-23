@@ -13,6 +13,8 @@ import com.openclassrooms.watchlist.validation.Priority;
 @GoodMovie(groups= {ClassValidations.class})
 public class WatchlistItem {
 	
+	Integer id;
+	
 	@NotBlank( message="Please enter the title" , groups= {FieldValidations.class})
 	private String title;
 	
@@ -39,6 +41,14 @@ public class WatchlistItem {
 		this.priority = priority;
 		this.comment = comment;
 		this.status = status;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getTitle() {

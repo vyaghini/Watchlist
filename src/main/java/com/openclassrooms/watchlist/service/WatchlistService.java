@@ -54,4 +54,19 @@ public class WatchlistService {
 		}
 		watchlistRepository.addItem(watchlistItem);	
 	}
+	
+	public Optional<WatchlistItem> findWatchlistItemById(Integer id) {
+		return watchlistRepository.findById(id);
+		
+	}
+
+	public void updateWatchlistItem(WatchlistItem inputWatchlistItem) {
+		WatchlistItem currentWatchlistItem = 
+				watchlistRepository.findById(inputWatchlistItem.getId()).get();
+		
+		currentWatchlistItem.setTitle(inputWatchlistItem.getTitle());
+		currentWatchlistItem.setComment(inputWatchlistItem.getComment());
+		currentWatchlistItem.setRating(inputWatchlistItem.getRating());
+		currentWatchlistItem.setPriority(inputWatchlistItem.getPriority());
+	}
 }
