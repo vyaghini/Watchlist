@@ -5,6 +5,10 @@ public class WatchlistItem {
 	int id;
 	String title, rating, priority, comment;
 	
+	
+	public WatchlistItem() {
+	}
+
 	public WatchlistItem(int id, String title, String rating, String priority, String comment) {
 		super();
 		this.id = id;
