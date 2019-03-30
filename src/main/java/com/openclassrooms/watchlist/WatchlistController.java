@@ -12,13 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class WatchlistController {
 	
+	List<WatchlistItem> watchlistItems = new ArrayList<WatchlistItem>();
+	
 	@GetMapping("/watchlist")
 	public ModelAndView getList() {
 			
 			String viewName = "watchlist";
 			Map<String, Object> model = new HashMap<String, Object>();
-			
-			List<WatchlistItem> watchlistItems = new ArrayList<WatchlistItem>();
 			
 			watchlistItems.add(new WatchlistItem(1, "Lion King","8.5","high","Hakuna matata!"));
 			watchlistItems.add(new WatchlistItem(2, "Frozen","7.5","medium","Let it go!"));
