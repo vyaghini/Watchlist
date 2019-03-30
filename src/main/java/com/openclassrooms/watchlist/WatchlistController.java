@@ -7,7 +7,10 @@ import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class WatchlistController {
@@ -19,11 +22,6 @@ public class WatchlistController {
 			
 			String viewName = "watchlist";
 			Map<String, Object> model = new HashMap<String, Object>();
-			
-			watchlistItems.add(new WatchlistItem(1, "Lion King","8.5","high","Hakuna matata!"));
-			watchlistItems.add(new WatchlistItem(2, "Frozen","7.5","medium","Let it go!"));
-			watchlistItems.add(new WatchlistItem(3, "Cars","7.1","low","Go go go!"));
-			watchlistItems.add(new WatchlistItem(4, "Wall-E","8.4","high","You are crying!"));
 			
 			model.put("watchlistItems", watchlistItems);
 			model.put("numberOfMovies", watchlistItems.size());
@@ -38,5 +36,16 @@ public class WatchlistController {
 		model.put("watchlistItem", new WatchlistItem());
 	
 		return new ModelAndView("watchlistItemForm" , model);
+	}
+	
+	@PostMapping("/watchlistItemForm")
+	public RedirectView submitWatchlistItemForm(@ModelAttribute WatchlistItem watchlistItem) {
+		
+		watchlistItems.add(watchlistItem);
+		
+		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl("/watchlist");
+		
+		return redirectView;
 	}
 }
