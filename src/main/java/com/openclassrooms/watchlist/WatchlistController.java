@@ -20,10 +20,10 @@ public class WatchlistController {
 			
 			List<WatchlistItem> watchlistItems = new ArrayList<WatchlistItem>();
 			
-			watchlistItems.add(new WatchlistItem("Lion King","8.5","high","Hakuna matata!"));
-			watchlistItems.add(new WatchlistItem("Frozen","7.5","medium","Let it go!"));
-			watchlistItems.add(new WatchlistItem("Cars","7.1","low","Go go go!"));
-			watchlistItems.add(new WatchlistItem("Wall-E","8.4","high","You are crying!"));
+			watchlistItems.add(new WatchlistItem(1, "Lion King","8.5","high","Hakuna matata!"));
+			watchlistItems.add(new WatchlistItem(2, "Frozen","7.5","medium","Let it go!"));
+			watchlistItems.add(new WatchlistItem(3, "Cars","7.1","low","Go go go!"));
+			watchlistItems.add(new WatchlistItem(4, "Wall-E","8.4","high","You are crying!"));
 			
 			model.put("watchlistItems", watchlistItems);
 			model.put("numberOfMovies", watchlistItems.size());
