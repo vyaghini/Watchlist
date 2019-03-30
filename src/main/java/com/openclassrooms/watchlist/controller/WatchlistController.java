@@ -35,7 +35,7 @@ public class WatchlistController {
 	}
 
 	@GetMapping("/watchlist")
-	public ModelAndView getMovieList() {
+	public ModelAndView getWatchList() {
 		
 		logger.info("GET /watchlist called");
 		
@@ -69,7 +69,7 @@ public class WatchlistController {
 	
 	@PostMapping("/watchlistItem")
 	public ModelAndView submitWatchlistItemForm(@Validated(ValidationOrder.class) WatchlistItem watchlistItem, BindingResult bindingResult) {
-
+		
 		logger.info("POST /watchlistItem called");
 		
 		if (bindingResult.hasErrors()) {
