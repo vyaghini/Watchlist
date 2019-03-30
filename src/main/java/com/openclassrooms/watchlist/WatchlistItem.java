@@ -5,13 +5,15 @@ public class WatchlistItem {
 	int id;
 	String title, rating, priority, comment;
 	
+	public static int index = 0;
 	
 	public WatchlistItem() {
+		this.id = index ++;
 	}
 
-	public WatchlistItem(int id, String title, String rating, String priority, String comment) {
+	public WatchlistItem(String title, String rating, String priority, String comment) {
 		super();
-		this.id = id;
+		this.id = index ++;
 		this.title = title;
 		this.rating = rating;
 		this.priority = priority;
