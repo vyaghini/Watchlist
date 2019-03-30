@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class WatchlistController {
 	
 	@GetMapping("/watchlist")
-	public ModelAndView getList() {
+	public ModelAndView getWatchlist() {
 			
 			String viewName = "watchlist";
 			Map<String, Object> model = new HashMap<String, Object>();
@@ -29,5 +29,14 @@ public class WatchlistController {
 			model.put("numberOfMovies", watchlistItems.size());
 			
 			return new ModelAndView(viewName , model);
+	}
+	
+	@GetMapping("/watchlistItemForm")
+	public ModelAndView showWatchlistItemForm() {
+		
+		Map<String, Object> model = new HashMap<String, Object>();
+		model.put("watchlistItem", new WatchlistItem());
+	
+		return new ModelAndView("watchlistItemForm" , model);
 	}
 }
