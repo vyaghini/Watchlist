@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +51,11 @@ public class WatchlistController {
 	}
 	
 	@PostMapping("/watchlistItemForm")
-	public RedirectView submitWatchlistItemForm(@ModelAttribute WatchlistItem watchlistItem) {
+	public ModelAndView submitWatchlistItemForm(@Valid WatchlistItem watchlistItem, BindingResult bindingResult) {
+	
+		if (bindingResult.hasErrors()) {
+            return new ModelAndView("watchlistItemForm");
+        }
 		
 		if (watchlistItem.getId()==null) {
 			watchlistItem.setId(index++);
@@ -64,7 +71,7 @@ public class WatchlistController {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/watchlist");
 		
-		return redirectView;
+		return new ModelAndView(redirectView);
 	}
 	
 	private WatchlistItem findWatchlistItemById(Integer id) {

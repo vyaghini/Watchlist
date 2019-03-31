@@ -1,30 +1,40 @@
 package com.openclassrooms.watchlist;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 public class WatchlistItem {
 
-	int id;
-	String title, rating, priority, comment;
+	private Integer id;
 	
-	public static int index = 0;
+	@NotBlank( message="Please enter the title")
+	private String title;
 	
+	@Rating
+	private String rating; 
+	
+	@Priority
+	private String priority;
+	
+	@Size(max=50,  message="Comment should be less than 50 chars")
+	private String comment;
+		
 	public WatchlistItem() {
-		this.id = index ++;
 	}
 
 	public WatchlistItem(String title, String rating, String priority, String comment) {
 		super();
-		this.id = index ++;
 		this.title = title;
 		this.rating = rating;
 		this.priority = priority;
 		this.comment = comment;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
