@@ -1,7 +1,11 @@
-package com.openclassrooms.watchlist;
+package com.openclassrooms.watchlist.domain;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.openclassrooms.watchlist.annotation.GoodMovie;
+import com.openclassrooms.watchlist.annotation.Priority;
+import com.openclassrooms.watchlist.annotation.Rating;
 
 @GoodMovie
 public class WatchlistItem {
