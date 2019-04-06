@@ -1,8 +1,6 @@
-package com.openclassrooms.watchlist;
+package com.openclassrooms.watchlist.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -10,17 +8,19 @@ import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.openclassrooms.watchlist.domain.WatchlistItem;
+import com.openclassrooms.watchlist.exception.DuplicateTitleException;
+import com.openclassrooms.watchlist.service.WatchlistService;
+
 @Controller
 public class WatchlistController {
 
-	List<WatchlistItem> watchlistItems = new ArrayList<WatchlistItem>();
-	private static int index = 1;
+	WatchlistService watchlistService = new WatchlistService(); 
 
 	@GetMapping("/watchlist")
 	public ModelAndView getWatchlist() {
@@ -28,8 +28,8 @@ public class WatchlistController {
 		String viewName = "watchlist";
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		model.put("watchlistItems", watchlistItems);
-		model.put("numberOfMovies", watchlistItems.size());
+		model.put("watchlistItems", watchlistService.getWatchlistItems());
+		model.put("numberOfMovies", watchlistService.getWatchlistItemsSize());
 
 		return new ModelAndView(viewName, model);
 	}
@@ -39,7 +39,7 @@ public class WatchlistController {
 
 		Map<String, Object> model = new HashMap<String, Object>();
 
-		WatchlistItem watchlistItem = findWatchlistItemById(id);
+		WatchlistItem watchlistItem = watchlistService.findWatchlistItemById(id);
 
 		if (watchlistItem == null) {
 			model.put("watchlistItem", new WatchlistItem());
@@ -56,45 +56,20 @@ public class WatchlistController {
 			return new ModelAndView("watchlistItemForm");
 		}
 		
-		if (itemAlreadyExists(watchlistItem.getTitle())) {
-			bindingResult.rejectValue("title", "", "This movie is already on your watchlist");
-            return new ModelAndView("watchlistItemForm");
-		}
-
 		if (watchlistItem.getId() == null) {
-			watchlistItem.setId(index++);
-			watchlistItems.add(watchlistItem);
-		} else {
-			WatchlistItem toBeUpdated = findWatchlistItemById(watchlistItem.getId());
-			toBeUpdated.setComment(watchlistItem.getComment());
-			toBeUpdated.setPriority(watchlistItem.getPriority());
-			toBeUpdated.setRating(watchlistItem.getRating());
-			toBeUpdated.setTitle(watchlistItem.getTitle());
+			try {
+				watchlistService.addWatchlistItem(watchlistItem);
+			} catch (DuplicateTitleException e) {
+				bindingResult.rejectValue("title", "", "This movie is already on your watchlist");
+	            return new ModelAndView("watchlistItem");
+			}			
+		}else {
+			watchlistService.updateWatchlistItem(watchlistItem);
 		}
 
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/watchlist");
 
 		return new ModelAndView(redirectView);
-	}
-
-	private WatchlistItem findWatchlistItemById(Integer id) {
-
-		for (WatchlistItem watchlistItem : watchlistItems) {
-			if (watchlistItem.getId().equals(id)) {
-				return watchlistItem;
-			}
-		}
-		return null;
-	}
-
-	private boolean itemAlreadyExists(String title) {
-
-		for (WatchlistItem watchlistItem : watchlistItems) {
-			if (watchlistItem.getTitle().equals(title)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }
