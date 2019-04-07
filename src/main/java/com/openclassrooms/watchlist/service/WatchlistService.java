@@ -15,8 +15,15 @@ import com.openclassrooms.watchlist.repository.WatchlistRepository;
 
 public class WatchlistService {
 		
-	private WatchlistRepository watchlistRepository = new WatchlistRepository();
-	private MovieRatingService movieRatingService = new MovieRatingService();
+	private WatchlistRepository watchlistRepository;
+	private MovieRatingService movieRatingService;
+
+	@Autowired
+	public WatchlistService(WatchlistRepository watchlistRepository, MovieRatingService movieRatingService) {
+		super();
+		this.watchlistRepository = watchlistRepository;
+		this.movieRatingService = movieRatingService;
+	}
 
 	public List<WatchlistItem> getWatchlistItems() {
 		List<WatchlistItem> watchlistItems = watchlistRepository.getList();
