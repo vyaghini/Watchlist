@@ -1,0 +1,298 @@
+openapi: 3.0.1
+info:
+  title: Mortgage Nykredit
+  description: BEC Mortgage Process Automation
+  termsOfService: http://www.bec.dk
+  contact:
+    name: BEC Bolig
+    url: 'http://www.bec.dk'
+    email: hps@bec.dk
+  license:
+    name: (C) BEC 2021
+    url: 'http://www.bec.dk'
+  version: masterflows-2.1.327
+servers:
+  - url: 'https://masterflows-master-latest-mortgage-t1.apps.test3.ocp.bec.dk'
+    description: Generated server url
+paths:
+  '/mortgage/nykredit/v2/accounting-entries/{transaction-token}':
+    put:
+      tags:
+        - nykredit-rest-service
+      operationId: acceptanceOfBookingEntryV2
+      parameters:
+        - name: transaction-token
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json: {}
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientErrorInformation'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: object
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: object
+  /mortgage/nykredit/v2/accounting-entries:
+    get:
+      tags:
+        - nykredit-rest-service
+      operationId: accountingEntriesV2
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountingEntryV2'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientErrorInformation'
+        '401':
+          description: Unauthorized
+          content:
+            '*/*':
+              schema:
+                type: object
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                type: object
+components:
+  schemas:
+    ClientErrorInformation:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          format: int32
+        error:
+          type: string
+        exception:
+          type: string
+        code:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        spanId:
+          type: string
+        traceId:
+          type: string
+        fieldErrors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldErrorDTO'
+    FieldErrorDTO:
+      type: object
+      properties:
+        objectName:
+          type: string
+        field:
+          type: string
+        message:
+          type: string
+        code:
+          type: string
+      xml:
+        name: FieldError
+    RegistrationInput:
+      required:
+        - etlDocumentUuid
+        - registrationStatus
+      type: object
+      properties:
+        registrationStatus:
+          type: string
+          enum:
+            - REGISTERED_WITHOUT_REMARKS
+            - REGISTERED_WITH_REMARKS
+            - SELECTED_FOR_MANUAL
+            - REJECTED
+        etlDocumentUuid:
+          type: string
+    AccountingEntryV2:
+      required:
+        - agreementId
+        - branch
+        - fees
+        - postingDate
+        - valueDate
+      type: object
+      properties:
+        agreementId:
+          type: string
+        branch:
+          $ref: '#/components/schemas/Branch'
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+        postingDate:
+          type: string
+          format: date
+        valueDate:
+          type: string
+          format: date
+    Amount:
+      type: object
+      properties:
+        value:
+          type: number
+        currency:
+          type: string
+    Branch:
+      required:
+        - departmentIdAtDatacenter
+        - registrationNumber
+      type: object
+      properties:
+        departmentIdAtDatacenter:
+          type: string
+        registrationNumber:
+          type: integer
+          format: int32
+    Fee:
+      required:
+        - amount
+        - destinationAccountNumber
+        - feeTypeId
+        - sourceAccountNumber
+      type: object
+      properties:
+        feeTypeId:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Amount'
+        sourceAccountNumber:
+          type: string
+        destinationAccountNumber:
+          type: string
+    AccountingEntry:
+      required:
+        - agreementId
+        - branch
+        - businessScenario
+        - fees
+        - postingDate
+        - prepaymentAgreementId
+        - transactionToken
+        - valueDate
+      type: object
+      properties:
+        transactionToken:
+          type: string
+        agreementId:
+          type: string
+        prepaymentAgreementId:
+          type: string
+        branch:
+          $ref: '#/components/schemas/Branch'
+        businessScenario:
+          type: string
+        fees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+        postingDate:
+          type: string
+          format: date
+        valueDate:
+          type: string
+          format: date
+  parameters:
+    X-IBM-Client-Id:
+      name: X-IBM-Client-Id
+      in: header
+      schema:
+        type: string
+  securitySchemes:
+    api-key-1:
+      type: http
+      scheme: bearer
+  x-ibm-configuration:
+    assembly:
+      execute:
+        - gatewayscript:
+            source: |-
+              function getDestinationHost(hostname) {
+                  switch(hostname) {
+                      case "udv":
+                      case "test":
+                          return "masterflows-master-latest-mortgage-t1.apps.test3.ocp.bec.dk";
+                          break;
+                      case "utst":
+                          return "masterflows-mortgage-u1.apps.test3.ocp.bec.dk";
+                          break;
+                      default:
+                          return "masterflows-mortgage-p1.apps.prod3.ocp.bec.dk";
+                  }
+              }
+
+              var operation_path = context.get('request.path');
+              var desinationHost = getDestinationHost(context.get('message.headers.x-bec-domain-env'));
+
+              context.set('destination_host', desinationHost);
+              context.set('operation_path', operation_path);
+
+              var request_query = context.get('request.querystring');
+              if( request_query ) {
+                  operation_path = operation_path + '?' + request_query;
+                  context.set( 'operation_path', operation_path )
+              }
+              console.debug( 'API operation path for ' + context.get('api.root') + ' is: ' + context.get('operation_path') );
+
+
+              var destination_host = context.get('destination_host');
+
+              if( !destination_host.startsWith("https://" ) && !destination_host.startsWith("http://" ) ) {
+                  destination_host = "https://" + destination_host;
+                  context.set('destination_host', destination_host);
+              }
+
+              if( context.get( 'message.headers.x-bec-proxy-url' ) ) {
+                  destination_host = context.get( 'message.headers.x-bec-proxy-url' );
+                  context.set('destination_host', destination_host);
+              }
+              console.debug( 'API assembly destination for ' + context.get('api.root') + ' is: ' + context.get('destination_host') + ' with path ' + context.get('operation_path') );
+            title: gatewayscript
+        - proxy:
+            cache-response: protocol
+            verb: keep
+            title: proxy
+            target-url: 'https://$(destination_host)$(operation_path)'
+            cache-ttl: 900
+            timeout: 60
+    enforced: true
+    testable: true
+    phase: realized
+    cors:
+      enabled: true
+    gateway: datapower-gateway
